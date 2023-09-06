@@ -23,9 +23,12 @@ pgo: $(FILE_NAME).abc
 	$(VM) --enable-pgo-profiler=true --compiler-pgo-profiler-path=$(FILE_NAME).ap --entry-point=$(FILE_NAME) $(FILE_NAME).abc
 
 # AOT compile hello-world.abc
-.PHONY: aot
+.PHONY: aot aot-log
 aot: $(FILE_NAME).abc $(FILE_NAME).ap
-	$(AOT) --compiler-fast-compile=false --compiler-trace-bc=true --enable-pgo-profiler=true --compiler-pgo-profiler-path=$(FILE_NAME).ap --aot-file=hello-world $(FILE_NAME).abc
+	$(AOT) --compiler-fast-compile=false --compiler-trace-bc=true --enable-pgo-profiler=true --compiler-pgo-profiler-path=$(FILE_NAME).ap --aot-file=$(FILE_NAME) $(FILE_NAME).abc
+
+aot-log: $(FILE_NAME).abc $(FILE_NAME).ap
+	$(AOT) --compiler-fast-compile=false --compiler-trace-bc=true --enable-pgo-profiler=true --compiler-pgo-profiler-path=$(FILE_NAME).ap --aot-file=$(FILE_NAME) --log-level=info --compiler-log=all0123 $(FILE_NAME).abc > $(FILE_NAME).log 2>&1
 
 # Execute hello-world.abc
 .PHONY: exe

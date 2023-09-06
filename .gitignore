@@ -3,3 +3,6 @@
 *.pa
 *.abc
 *.an
+*.abc_opt.ll
+*.abc.ll
+*.log
