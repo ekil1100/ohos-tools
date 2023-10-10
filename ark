@@ -8,9 +8,9 @@ check() {
 }
 
 run() {
-    echo "\e[96m$1\e[0m"
+    echo -e "\e[96m$1\e[0m"
     $1
-    check "$1"
+    check $1
 }
 
 if [[ "$@" =~ "clean" ]]; then
