@@ -1,7 +1,14 @@
 #!/bin/bash
 
+check() {
+    if [ $? -ne 0 ]; then
+        echo "$1 command failed with exit code $?"
+        exit 1
+    fi
+}
+
 if [[ "$@" =~ "clean" ]]; then
-    rm -rf *.abc *.ap *.ai *.an *.pa
+    rm -rf *.abc *.ap *.ai *.an *.pa *.log
     exit 0
 fi
 
@@ -9,13 +16,27 @@ file_path=$1
 file_name=$(basename "$file_path" | cut -d. -f1)
 
 es2abc $file_path --merge-abc --module --type-extractor --output $file_name.abc
+check "es2abc"
 
 ark_js_vm --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --entry-point=$file_name $file_name.abc
+check "ark_js_vm"
 
 if [[ "$@" =~ "aot" ]]; then
     ark_aot_compiler --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc
+    check "ark_aot_compiler"
+fi
+
+if [[ "$@" =~ "ir" ]]; then
+    ark_aot_compiler --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name --compiler-log=allcir --log-level=info  $file_name.abc > $file_name.log
+    check "ark_aot_compiler"
 fi
 
 if [[ "$@" =~ "asm" ]]; then
     ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc
+    check "ark_js_vm"
+fi
+
+if [[ "$@" =~ "dsm" ]]; then
+    ark_disasm $file_name.abc $file_name.pa
+    check "ark_disasm"
 fi
