@@ -1,5 +1,24 @@
 #!/bin/bash
 
+export OHOS_PATH=~/repo/ohos/main
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/test/test
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/common/common
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
+if [[ $OHOS_DEBUG == "on" ]]; then
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
+    runtime_path=$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
+else
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
+    runtime_path=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
+fi
+export PATH=$PATH:$LD_LIBRARY_PATH
+
 check() {
     if [ $? -ne 0 ]; then
         echo "[Error] $1 command failed with exit code $?"
@@ -13,39 +32,55 @@ run() {
     check $1
 }
 
-if [[ "$@" =~ "clean" ]]; then
-    rm -rf *.abc *.ap *.ai *.an *.pa *.abc.ll *.abc_opt.ll *.log
+if [[ $1 == "info" ]]; then
+    echo "OHOS_PATH: $OHOS_PATH"
+    echo "RUNTIME_PATH: $runtime_path"
+    echo "OHOS_DEBUG: $OHOS_DEBUG"
+    echo "OHOS_LOG_LEVEL: $OHOS_LOG_LEVEL"
     exit 0
 fi
 
-if [ "$1" == "build" ]; then
-    if [[ "$2" == "pre" ]]; then
-        run "$OHOS_ROOT/build/prebuilts_download.sh"
-    elif [[ "$2" == "debug" ]]; then
-        run "$OHOS_ROOT/build.sh --product-name rk3568 --no-prebuilt-sdk --build-target ark_js_host_linux_tools_packages --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_host_linux_tools_packages --gn-args is_debug=true"
-    elif [[ "$2" == "ut" ]]; then
-        if [[ -n "$2" ]]; then
-            run "$OHOS_ROOT/build.sh --no-prebuilt-sdk --product-name rk3568 --build-target ${2}Action --gn-args is_debug=true"
+if [[ $1 == "init" ]]; then
+    dir=$(dirname $(realpath $0))
+    cat $dir/ark.bash
+    exit 0
+fi
+
+if [[ $1 == "build" ]]; then
+    if [[ $2 == "pre" ]]; then
+        run "$OHOS_PATH/build/prebuilts_download.sh"
+    elif [[ $2 == "ut" ]]; then
+        if [[ -n $3 ]]; then
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ${3}Action --gn-args is_debug=true"
         else
-            run "$OHOS_ROOT/build.sh --no-prebuilt-sdk --product-name rk3568 --build-target ark_js_host_unittest --gn-args is_debug=true"
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_unittest --gn-args is_debug=true"
         fi
-    elif [[ "$2" == "262aot" ]]; then
-        cd $OHOS_ROOT/arkcompiler/ets_frontend
-        if [ -n "$2" ]; then
-            run "python3 $OHOS_ROOT/arkcompiler/ets_frontend/test262/run_test262.py --file $2 --es2021 all --libs-dir $OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/icu:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_ROOT/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
+    elif [[ $2 == "262aot" ]]; then
+        cd $OHOS_PATH/arkcompiler/ets_frontend
+        if [[ -n $3 ]]; then
+            run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --file $3 --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
         else 
-            run "python3 $OHOS_ROOT/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/icu:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_ROOT/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
+            run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
         fi
-    elif [ "$2" == "262asm" ]; then
-        cd $OHOS_ROOT/arkcompiler/ets_frontend
-        if [ -n "$2" ]; then
-            run "python3 $OHOS_ROOT/arkcompiler/ets_frontend/test262/run_test262.py --file $2 --es2021 all --libs-dir $OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/icu:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_ROOT/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
+    elif [[ "$2" == "262asm" ]]; then
+        cd $OHOS_PATH/arkcompiler/ets_frontend
+        if [[ -n "$3" ]]; then
+            run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --file $3 --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
         else
-            run "python3 $OHOS_ROOT/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/icu:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_ROOT/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_ROOT/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_ROOT/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
+            run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
         fi
     else
-        run "$OHOS_ROOT/build.sh --product-name rk3568 --no-prebuilt-sdk --build-target ark_js_host_linux_tools_packages --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_host_linux_tools_packages"
+        if [[ $OHOS_DEBUG == "on" ]]; then
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_linux_tools_packages --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_host_linux_tools_packages --gn-args is_debug=true"
+        else
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_linux_tools_packages --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_host_linux_tools_packages"
+        fi
     fi
+    exit 0
+fi
+
+if [[ $1 == "clean" ]]; then
+    rm -rf *.abc *.ap *.ai *.an *.pa *.abc.ll *.abc_opt.ll *.log
     exit 0
 fi
 

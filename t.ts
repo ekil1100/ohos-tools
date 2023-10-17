@@ -1,10 +1,6 @@
-function f45() {
-  return 0;
-  class C113 {
-    [Symbol.iterator]() {
-      return {
-        next() {},
-      };
-    }
-  }
+function f523() {
+  throw "error";
+  function f537() {}
 }
+f523();
+f523();

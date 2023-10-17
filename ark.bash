@@ -1,0 +1,2 @@
+export OHOS_DEBUG=off
+export OHOS_LOG_LEVEL=warning
