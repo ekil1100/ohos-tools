@@ -46,29 +46,35 @@ if [[ $1 == "init" ]]; then
     exit 0
 fi
 
-if [[ $1 == "build" ]]; then
-    if [[ $2 == "pre" ]]; then
-        run "$OHOS_PATH/build/prebuilts_download.sh"
-    elif [[ $2 == "ut" ]]; then
-        if [[ -n $3 ]]; then
-            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ${3}Action --gn-args is_debug=true"
+if [[ $1 == "ut" ]]; then
+        if [[ -n $2 ]]; then
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ${2}Action --gn-args is_debug=true"
         else
             run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_unittest --gn-args is_debug=true"
         fi
-    elif [[ $2 == "262aot" ]]; then
-        cd $OHOS_PATH/arkcompiler/ets_frontend
+fi
+
+if [[ $1 == "262" ]]; then
+    cd $OHOS_PATH/arkcompiler/ets_frontend
+    if [[ $2 == "aot" ]]; then
         if [[ -n $3 ]]; then
             run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --file $3 --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
-        else 
+        else
             run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
         fi
-    elif [[ "$2" == "262asm" ]]; then
-        cd $OHOS_PATH/arkcompiler/ets_frontend
-        if [[ -n "$3" ]]; then
+    elif [[ $2 == "asm" ]]; then
+        if [[ -n $3 ]]; then
             run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --file $3 --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
         else
             run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/cjson:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-frontend=es2panda"
         fi
+    fi
+    exit 0
+fi
+
+if [[ $1 == "build" ]]; then
+    if [[ $2 == "pre" ]]; then
+        run "$OHOS_PATH/build/prebuilts_download.sh"
     else
         if [[ $OHOS_DEBUG == "on" ]]; then
             run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_linux_tools_packages --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_host_linux_tools_packages --gn-args is_debug=true"
@@ -106,7 +112,7 @@ for arg in "$@"; do
     fi
 
     if [[ $arg == "perf" ]]; then
-        run "perftool $file_name.an"
+        # run "perftool $file_name.an"
         run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
         run "perf report > $file_name.perf"
     fi
