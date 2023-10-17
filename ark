@@ -28,7 +28,7 @@ check() {
 
 run() {
     echo -e "\e[96m$1\e[0m"
-    $1
+    eval $1
     check $1
 }
 
@@ -80,7 +80,7 @@ if [[ $1 == "build" ]]; then
 fi
 
 if [[ $1 == "clean" ]]; then
-    rm -rf *.abc *.ap *.ai *.an *.pa *.abc.ll *.abc_opt.ll *.log
+    rm -rf *.abc *.ap *.ai *.an *.pa *.abc.ll *.abc_opt.ll *.log *.perf
     exit 0
 fi
 
@@ -103,5 +103,11 @@ for arg in "$@"; do
 
     if [[ "$arg" == "dasm" ]]; then
         run "ark_disasm $file_name.abc $file_name.pa"
+    fi
+
+    if [[ $arg == "perf" ]]; then
+        run "perftool $file_name.an"
+        run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
+        run "perf report > $file_name.perf"
     fi
 done

@@ -6,3 +6,6 @@
 *.abc_opt.ll
 *.abc.ll
 *.log
+*.perf
+perf.data
+perf.data.old
