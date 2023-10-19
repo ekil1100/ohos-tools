@@ -6,16 +6,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x8
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/test/test
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/common/common
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
 if [[ $OHOS_DEBUG == "on" ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
-    runtime_path=$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
 else
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
-    runtime_path=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
 fi
 export PATH=$PATH:$LD_LIBRARY_PATH
 
@@ -32,9 +29,9 @@ run() {
     check $1
 }
 
-if [[ $1 == "info" ]]; then
+if [[ -z $1 ]]; then
     echo "OHOS_PATH: $OHOS_PATH"
-    echo "RUNTIME_PATH: $runtime_path"
+    echo "RUNTIME_PATH: $(dirname $(which ark_js_vm))"
     echo "OHOS_DEBUG: $OHOS_DEBUG"
     echo "OHOS_LOG_LEVEL: $OHOS_LOG_LEVEL"
     exit 0
@@ -115,8 +112,11 @@ for arg in "$@"; do
         run "perftool $file_name.an"
     fi
 
-    if [[ $arg == "perf" ]]; then
+    if [[ $arg == "record" ]]; then
         run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
+    fi
+
+    if [[ $arg == "report" ]]; then
         run "perf report > $file_name.perf"
     fi
 done
