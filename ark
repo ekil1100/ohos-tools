@@ -55,7 +55,7 @@ if [[ $1 == "ut" ]]; then
 fi
 
 if [[ $1 == "262" ]]; then
-    cd $OHOS_PATH/arkcompiler/ets_frontend
+    run "cd $OHOS_PATH/arkcompiler/ets_frontend"
     if [[ $2 == "aot" ]]; then
         if [[ -n $3 ]]; then
             run "python3 $OHOS_PATH/arkcompiler/ets_frontend/test262/run_test262.py --file $3 --es2021 all --libs-dir $OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/icu:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib --ark-frontend-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/es2abc --ark-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_js_vm --ark-aot-tool=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler --merge-abc-binary=$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend/merge_abc --ark-aot --ark-frontend=es2panda"
@@ -111,8 +111,11 @@ for arg in "$@"; do
         run "ark_disasm $file_name.abc $file_name.pa"
     fi
 
+    if [[ "$arg" == "perftool" ]]; then
+        run "perftool $file_name.an"
+    fi
+
     if [[ $arg == "perf" ]]; then
-        # run "perftool $file_name.an"
         run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
         run "perf report > $file_name.perf"
     fi
