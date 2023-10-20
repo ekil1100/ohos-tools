@@ -9,3 +9,5 @@
 *.perf
 perf.data
 perf.data.old
+.idea
+.vscode

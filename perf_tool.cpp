@@ -8,13 +8,14 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
-    {
-        std::cout << "Usage: " << argv[0] << " <elf_file>\n";
-        return 1;
-    }
+    // if (argc != 2)
+    // {
+    //     std::cout << "Usage: " << argv[0] << " <elf_file>\n";
+    //     return 1;
+    // }
 
-    int fd = open(argv[1], O_RDWR);
+    // int fd = open(argv[1], O_RDWR);
+    int fd = open("t.an", O_RDWR);
     if (fd < 0)
     {
         std::perror("open");
@@ -46,7 +47,8 @@ int main(int argc, char *argv[])
         if (shdrs[i].sh_type == SHT_SYMTAB)
         {
             // ark .strtab index is 2;
-            shdrs[i].sh_link = 2;
+            std::cout << "sh_link is " << shdrs[i].sh_link << std::endl;
+            // shdrs[i].sh_link = 2;
             const char *symtab_str = (const char *)mem + shdrs[shdrs[i].sh_link].sh_offset;
             Elf64_Sym *syms = (Elf64_Sym *)((char *)mem + shdrs[i].sh_offset);
             int first_global = -1;

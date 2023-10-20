@@ -108,7 +108,7 @@ for arg in "$@"; do
         run "ark_disasm $file_name.abc $file_name.pa"
     fi
 
-    if [[ "$arg" == "perftool" ]]; then
+    if [[ "$arg" == "fixan" ]]; then
         run "perftool $file_name.an"
     fi
 
