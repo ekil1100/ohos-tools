@@ -100,6 +100,10 @@ for arg in "$@"; do
         run "ark_aot_compiler --compiler-log=all0123 --log-level=warning --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
     fi
 
+    if [[ "$arg" == "aotd" ]]; then
+        run "gdb --args ark_aot_compiler --compiler-log=all0123 --log-level=warning --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
+    fi
+
     if [[ "$arg" == "asm" ]]; then
         run "ark_js_vm --compiler-log=all0123 --log-level=warning --entry-point=$file_name --aot-file=$file_name $file_name.abc"
     fi
