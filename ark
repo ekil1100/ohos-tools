@@ -116,6 +116,7 @@ for arg in "$@"; do
         run "perftool $file_name.an"
     fi
 
+    # ark_js_vm --entry-point=t --aot-file=t t.abc
     if [[ $arg == "record" ]]; then
         run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
     fi
