@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export OHOS_PATH=~/repo/ohos/main
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
@@ -98,6 +96,10 @@ fi
 for arg in "$@"; do
     if [[ "$arg" == "aot" ]]; then
         run "ark_aot_compiler --compiler-log=all0123 --log-level=warning --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
+    fi
+
+    if [[ "$arg" == "aotlog" ]]; then
+        run "ark_aot_compiler --compiler-log=all0123 --log-level=info --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc > $file_name.log"
     fi
 
     if [[ "$arg" == "aotd" ]]; then
