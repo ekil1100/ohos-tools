@@ -35,6 +35,16 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
+if [[ $1 == "aot" ]]; then
+    ark_aot_compiler ${@:2}
+    exit 0
+fi
+
+if [[ $1 == "vm" ]]; then
+    ark_js_vm ${@:2}
+    exit 0
+fi
+
 if [[ $1 == "init" ]]; then
     dir=$(dirname $(realpath $0))
     cat $dir/ark.bash
@@ -42,11 +52,12 @@ if [[ $1 == "init" ]]; then
 fi
 
 if [[ $1 == "ut" ]]; then
-        if [[ -n $2 ]]; then
-            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ${2}Action --gn-args is_debug=true"
-        else
-            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_unittest --gn-args is_debug=true"
-        fi
+    if [[ -n $2 ]]; then
+        run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ${2}Action --gn-args is_debug=true"
+    else
+        run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_js_host_unittest --gn-args is_debug=true"
+    fi
+    exit 0
 fi
 
 if [[ $1 == "262" ]]; then
@@ -88,14 +99,22 @@ fi
 file_path=$1
 file_name=$(basename "$file_path" | cut -d. -f1)
 
-if [[ "$@" =~ "abc" ]]; then
-    run "es2abc $file_path --merge-abc --module --type-extractor --output $file_name.abc"
-    run "ark_js_vm --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --entry-point=$file_name $file_name.abc"
-fi
-
 for arg in "$@"; do
+    if [[ $arg == "abc" || $arg == "--" ]]; then
+        run "es2abc $file_path --merge-abc --module --type-extractor --output $file_name.abc"
+    fi
+
+    if [[ $arg == "ap" || $arg == "--" ]]; then
+        run "ark_js_vm --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --entry-point=$file_name $file_name.abc"
+    fi
+
     if [[ "$arg" == "aot" ]]; then
         run "ark_aot_compiler --compiler-log=all0123 --log-level=warning --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
+    fi
+
+    # ark aot --log-components=compiler --compiler-log=all0123 --log-level=debug --aot-file=i i.abc
+    if [[ "$arg" == "aotp" ]]; then
+        run "ark_aot_compiler --aot-file=$file_name $file_name.abc"
     fi
 
     if [[ "$arg" == "aotlog" ]]; then
@@ -104,6 +123,10 @@ for arg in "$@"; do
 
     if [[ "$arg" == "aotd" ]]; then
         run "gdb --args ark_aot_compiler --compiler-log=all0123 --log-level=warning --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
+    fi
+
+    if [[ "$arg" == "aotpd" ]]; then
+        run "gdb --args ark_aot_compiler --aot-file=$file_name $file_name.abc"
     fi
 
     if [[ "$arg" == "asm" ]]; then
