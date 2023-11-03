@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(gdb) Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${userHome}/repo/ohos/main/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler",
+      "args": [
+        "--log-components=compiler",
+        "--compiler-log=all0123",
+        "--log-level=debug",
+        "--aot-file=i",
+        "i.abc"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${userHome}/repo/ohos/tools",
+      "envFile": "${workspaceFolder}/.env",
+      "externalConsole": false,
+      "linux": {
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to linux",
+          "text": "-gdb-set disassembly-flavor linux",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
