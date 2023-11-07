@@ -5,6 +5,7 @@
 *.an
 *.abc_opt.ll
 *.abc.ll
+*.pa
 *.log
 *.perf
 perf.data

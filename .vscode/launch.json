@@ -10,7 +10,7 @@
       "request": "launch",
       "program": "${userHome}/repo/ohos/main/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime/ark_aot_compiler",
       "args": [
-        "--log-components=compiler",
+        // "--log-components=compiler",
         "--compiler-log=all0123",
         "--log-level=debug",
         "--aot-file=i",

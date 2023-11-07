@@ -28,8 +28,9 @@ run() {
 }
 
 if [[ -z $1 ]]; then
+    echo "OHOS_ENV: $OHOS_ENV"
     echo "OHOS_PATH: $OHOS_PATH"
-    echo "RUNTIME_PATH: $(dirname $(which ark_js_vm))"
+    echo "JSVM_PATH: $(dirname $(which ark_js_vm))"
     echo "OHOS_DEBUG: $OHOS_DEBUG"
     echo "OHOS_LOG_LEVEL: $OHOS_LOG_LEVEL"
     exit 0
