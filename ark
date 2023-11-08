@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export OHOS_PATH=~/repo/ohos/$OHOS_ENV
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
@@ -28,9 +28,10 @@ run() {
 }
 
 if [[ -z $1 ]]; then
+    OHOS_JSVM_PATH=$(dirname $(which ark_js_vm) 2>/dev/null || echo '')
     echo "OHOS_ENV: $OHOS_ENV"
     echo "OHOS_PATH: $OHOS_PATH"
-    echo "JSVM_PATH: $(dirname $(which ark_js_vm))"
+    echo "OHOS_JSVM_PATH: $OHOS_JSVM_PATH"
     echo "OHOS_DEBUG: $OHOS_DEBUG"
     echo "OHOS_LOG_LEVEL: $OHOS_LOG_LEVEL"
     exit 0
@@ -84,7 +85,7 @@ if [[ $1 == "build" ]]; then
         run "$OHOS_PATH/build/prebuilts_download.sh"
     else
         if [[ $OHOS_DEBUG == "on" ]]; then
-            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_js_host_linux_tools_packages --gn-args is_debug=true"
+            run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_js_host_linux_tools_packages --gn-args is_debug=true  --gn-flags=--export-compile-commands"
         else
             run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ets_frontend_build --build-target ark_js_packages --build-target ark_js_host_linux_tools_packages"
         fi
