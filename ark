@@ -145,6 +145,7 @@ for arg in "$@"; do
     # --compiler-log=all0123 --log-level=info  --compiler-trace-bc=true
     if [[ "$arg" == "aot" || $arg == "all" ]]; then
         args=(
+            "--compiler-trace-bc=true"
             "--compiler-pgo-profiler-path=$file_name.ap"
             "--aot-file=$file_name"
             "$file_name.abc"
@@ -156,6 +157,7 @@ for arg in "$@"; do
     # --compiler-log=all0123 --log-level=info
     if [[ "$arg" == "asm" || $arg == "all" ]]; then
         args=(
+            "--compiler-log=all0123 --log-level=info"
             # "--asm-interpreter=false"
             "--entry-point=$file_name"
             "--aot-file=$file_name"
