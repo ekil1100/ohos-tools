@@ -43,6 +43,11 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
+if [[ $1 == "abc" ]]; then
+    es2abc ${@:2}
+    exit 0
+fi
+
 if [[ $1 == "aot" ]]; then
     ark_aot_compiler ${@:2}
     exit 0
@@ -144,77 +149,64 @@ for arg in "$@"; do
             "--entry-point=$file_name"
             "$file_name.abc"
         )
+        if [[ $@ =~ "-info" ]]; then
+            args=("--compiler-log=all0123" "--log-level=info" "${args[@]}")
+        fi
         run "rm -f $file_name.ap"
         run "ark_js_vm ${args[@]}"
     fi
 
-    # --compiler-log=all0123 --log-level=info  --compiler-trace-bc=true
-    if [[ "$arg" == "aot" || $arg == "all" ]]; then
+    if [[ $arg == "aot" || $arg == "all" ]]; then
         args=(
-            "--compiler-trace-bc=true"
             "--compiler-pgo-profiler-path=$file_name.ap"
             "--aot-file=$file_name"
             "$file_name.abc"
         )
+        if [[ $@ =~ "-info" ]]; then
+            args=("--compiler-log=all0123" "--log-level=info" "${args[@]}")
+        fi
+        if [[ $@ =~ "-bc" ]]; then
+            args=("--compiler-trace-bc=true" "${args[@]}")
+        fi
+        if [[ $@ =~ "-p" ]]; then
+            for i in "${!args[@]}"; do
+                if [[ ${args[i]} != "--compiler-pgo-profiler-path=$file_name.ap" ]]; then
+                    new_args+=("${args[i]}")
+                fi
+            done
+            args=("${new_args[@]}")
+        fi
+        if [[ $@ =~ "-o" ]]; then
+            args+=("> $file_name.log")
+        fi
         run "rm -f $file_name.an $file_name.ai"
-        run "ark_aot_compiler ${args[@]}"
+        if [[ $@ =~ "-d" ]]; then
+            run "gdb --args ark_aot_compiler ${args[@]}"
+        else
+            run "ark_aot_compiler ${args[@]}"
+        fi
     fi
 
-    # --compiler-log=all0123 --log-level=info
     if [[ "$arg" == "asm" || $arg == "all" ]]; then
         args=(
-            "--compiler-log=all0123 --log-level=info"
-            # "--asm-interpreter=false"
             "--entry-point=$file_name"
             "--aot-file=$file_name"
             "$file_name.abc"
         )
-        run "ark_js_vm ${args[@]}"
-    fi
-
-    # ark aot --log-components=compiler --compiler-log=all0123 --log-level=debug --aot-file=i i.abc
-    if [[ "$arg" == "aotp" ]]; then
-        run "ark_aot_compiler --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "aotlog" ]]; then
-        run "ark_aot_compiler --compiler-log=all0123 --log-level=info --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc > $file_name.log"
-    fi
-
-    if [[ "$arg" == "aotd" ]]; then
-        run "gdb --args ark_aot_compiler --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "aotpd" ]]; then
-        run "gdb --args ark_aot_compiler --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "asmp" ]]; then
-        run "ark_js_vm --asm-interpreter=false --entry-point=$file_name --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "asmd" ]]; then
-        run "gdb --args ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "asmpd" ]]; then
-        run "gdb --args ark_js_vm --asm-interpreter=false --entry-point=$file_name --aot-file=$file_name $file_name.abc"
+        if [[ $@ =~ "-bc" || $@ =~ "-info" ]]; then
+            args=("--compiler-log=all0123" "--log-level=info" "${args[@]}")
+        fi
+        if [[ $@ =~ "-p" ]]; then
+            args=("--asm-interpreter=false" "${args[@]}")
+        fi
+        if [[ $@ =~ "-d" ]]; then
+            run "gdb --args ark_js_vm ${args[@]}"
+        else
+            run "ark_js_vm ${args[@]}"
+        fi
     fi
 
     if [[ "$arg" == "dasm" ]]; then
         run "ark_disasm $file_name.abc $file_name.pa"
-    fi
-
-    if [[ "$arg" == "fixan" ]]; then
-        run "perftool $file_name.an"
-    fi
-
-    # ark_js_vm --entry-point=t --aot-file=t t.abc
-    if [[ $arg == "record" ]]; then
-        run "perf record ark_js_vm --entry-point=$file_name --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ $arg == "report" ]]; then
-        run "perf report > $file_name.perf"
     fi
 done
