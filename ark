@@ -43,21 +43,6 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
-# if [[ $1 == "abc" ]]; then
-#     es2abc ${@:2}
-#     exit 0
-# fi
-
-# if [[ $1 == "aot" ]]; then
-#     ark_aot_compiler ${@:2}
-#     exit 0
-# fi
-
-# if [[ $1 == "vm" ]]; then
-#     ark_js_vm ${@:2}
-#     exit 0
-# fi
-
 if [[ $1 == "init" ]]; then
     dir=$(dirname $(realpath $0))
     cat $dir/ark.bash
