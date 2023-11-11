@@ -1,0 +1,71 @@
+         Uint32Array : [Function(0x7fffb53418a0)] Attr(WC) InlinedProps: false Order: 29
+              escape : [Function(0x7fffb5088ea0)] Attr(WC) InlinedProps: false Order: 55
+  decodeURIComponent : [Function(0x7fffb5088e38)] Attr(WC) InlinedProps: false Order: 57
+    TerminationError : [Function(0x7fffb5342630)] Attr(WC) InlinedProps: false Order: 11
+          Int16Array : [Function(0x7fffb5341768)] Attr(WC) InlinedProps: false Order: 26
+                Intl : [JSIntl(0x7fffb5342698)] Attr(WC) InlinedProps: false Order: 70
+             Boolean : [Function(0x7fffb53413a8)] Attr(WC) InlinedProps: false Order: 40
+              RegExp : [Function(0x7fffb5001728)] Attr(WC) InlinedProps: false Order: 41
+    startRuntimeStat : [Function(0x7fffb5088dd0)] Attr(WC) InlinedProps: false Order: 46
+          Int32Array : [Function(0x7fffb5341838)] Attr(WC) InlinedProps: false Order: 28
+             Atomics : [Object(0x7fffb5342dd8)] Attr(WC) InlinedProps: false Order: 63
+            DataView : [Function(0x7fffb5342138)] Attr(WC) InlinedProps: false Order: 35
+           Int8Array : [Function(0x7fffb5341630)] Attr(WC) InlinedProps: false Order: 23
+            URIError : [Function(0x7fffb5342490)] Attr(WC) InlinedProps: false Order: 7
+      ReferenceError : [Function(0x7fffb5342358)] Attr(WC) InlinedProps: false Order: 4
+           decodeURI : [Function(0x7fffb5088d68)] Attr(WC) InlinedProps: false Order: 53
+                eval : [Function(0x7fffb5088d00)] Attr(WC) InlinedProps: false Order: 50
+      BigUint64Array : [Function(0x7fffb5341a40)] Attr(WC) InlinedProps: false Order: 33
+    OutOfMemoryError : [Function(0x7fffb53425c8)] Attr(WC) InlinedProps: false Order: 10
+             WeakMap : [Function(0x7fffb5342b70)] Attr(WC) InlinedProps: false Order: 18
+  encodeURIComponent : [Function(0x7fffb5088c98)] Attr(WC) InlinedProps: false Order: 58
+                Math : [Object(0x7fffb5342d98)] Attr(WC) InlinedProps: false Order: 43
+      AggregateError : [Function(0x7fffb5342428)] Attr(WC) InlinedProps: false Order: 6
+             WeakSet : [Function(0x7fffb5342bd8)] Attr(WC) InlinedProps: false Order: 19
+FinalizationRegistry : [Function(0x7fffb5342ca8)] Attr(WC) InlinedProps: false Order: 21
+           EvalError : [Function(0x7fffb5342560)] Attr(WC) InlinedProps: false Order: 9
+               print : [Function(0x7fffb5088c30)] Attr(WC) InlinedProps: false Order: 44
+          TypedArray : [Function(0x7fffb5341478)] Attr(WC) InlinedProps: false Order: 22
+              String : [Function(0x7fffb5342e58)] Attr(WC) InlinedProps: false Order: 42
+   SharedArrayBuffer : [Function(0x7fffb5341f30)] Attr(WC) InlinedProps: false Order: 36
+markModuleCollectable : [Function(0x7fffb5088bc8)] Attr(WC) InlinedProps: false Order: 45
+              Symbol : [Function(0x7fffb5342288)] Attr(WC) InlinedProps: false Order: 12
+               Array : [Function(0x7fffb5001e38)] Attr(WC) InlinedProps: false Order: 14
+                 Map : [Function(0x7fffb5342b08)] Attr(WC) InlinedProps: false Order: 17
+            parseInt : [Function(0x7fffb5087c18)] Attr(WC) InlinedProps: false Order: 39
+   GeneratorFunction : [Function(0x7fffb5342fb0)] Attr(WC) InlinedProps: false Order: 67
+             Reflect : [Object(0x7fffb53431c0)] Attr(WC) InlinedProps: false Order: 66
+            ArkTools : [Object(0x7fffb5088b88)] Attr(NONE) InlinedProps: false Order: 48
+                 Set : [Function(0x7fffb5342a20)] Attr(WC) InlinedProps: false Order: 16
+         SyntaxError : [Function(0x7fffb53424f8)] Attr(WC) InlinedProps: false Order: 8
+            Infinity : [Double] :  inf Attr(NONE) InlinedProps: false Order: 60
+           TypeError : [Function(0x7fffb53423c0)] Attr(WC) InlinedProps: false Order: 5
+                Date : [Function(0x7fffb53411d8)] Attr(WC) InlinedProps: false Order: 15
+           undefined : [Special Value] : Undefined Attr(NONE) InlinedProps: false Order: 62
+               Proxy : [Function(0x7fffb5342f48)] Attr(WC) InlinedProps: false Order: 65
+AsyncGeneratorFunction : [Function(0x7fffb5343038)] Attr(WC) InlinedProps: false Order: 68
+         ArrayBuffer : [Function(0x7fffb5341ec8)] Attr(WC) InlinedProps: false Order: 34
+            unescape : [Function(0x7fffb5088b20)] Attr(WC) InlinedProps: false Order: 56
+             WeakRef : [Function(0x7fffb5342c40)] Attr(WC) InlinedProps: false Order: 20
+                 NaN : [Double] :  nan Attr(NONE) InlinedProps: false Order: 61
+              Object : [Function(0x7fffb5001c98)] Attr(WC) InlinedProps: false Order: 1
+          globalThis : [GlobalObject(0x7fffb4fc4460)] Attr(WC) InlinedProps: false Order: 59
+               Error : [Function(0x7fffb5341410)] Attr(WC) InlinedProps: false Order: 2
+              Number : [Function(0x7fffb5341108)] Attr(WC) InlinedProps: false Order: 37
+          parseFloat : [Function(0x7fffb5087bb0)] Attr(WC) InlinedProps: false Order: 38
+          RangeError : [Function(0x7fffb53422f0)] Attr(WC) InlinedProps: false Order: 3
+       BigInt64Array : [Function(0x7fffb53419d8)] Attr(WC) InlinedProps: false Order: 32
+          ArkPrivate : [Object(0x7fffb5009c98)] Attr(NONE) InlinedProps: false Order: 49
+     stopRuntimeStat : [Function(0x7fffb5009c30)] Attr(WC) InlinedProps: false Order: 47
+              BigInt : [Function(0x7fffb5341170)] Attr(WC) InlinedProps: false Order: 13
+               isNaN : [Function(0x7fffb5009bc8)] Attr(WC) InlinedProps: false Order: 52
+                JSON : [Object(0x7fffb5342e18)] Attr(WC) InlinedProps: false Order: 64
+           encodeURI : [Function(0x7fffb5009b60)] Attr(WC) InlinedProps: false Order: 54
+            Function : [Function(0x7fffb50030c8)] Attr(WC) InlinedProps: false Order: 0
+            isFinite : [Function(0x7fffb5009af8)] Attr(WC) InlinedProps: false Order: 51
+         Uint16Array : [Function(0x7fffb53417d0)] Attr(WC) InlinedProps: false Order: 27
+          Uint8Array : [Function(0x7fffb5341698)] Attr(WC) InlinedProps: false Order: 24
+             Promise : [Function(0x7fffb5343ab0)] Attr(WC) InlinedProps: false Order: 69
+   Uint8ClampedArray : [Function(0x7fffb5341700)] Attr(WC) InlinedProps: false Order: 25
+        Float32Array : [Function(0x7fffb5341908)] Attr(WC) InlinedProps: false Order: 30
+        Float64Array : [Function(0x7fffb5341970)] Attr(WC) InlinedProps: false Order: 31

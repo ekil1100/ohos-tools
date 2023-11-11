@@ -1,1 +1,1 @@
-const arr = new Array();
+globalThis.Array = "Array";

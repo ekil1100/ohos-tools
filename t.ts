@@ -1,41 +1,23 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 declare function print(arg: any, arg1?: any): string;
 
-function extendBuiltin(obj: any) {
-  obj.now = "now";
+function modify(key: any) {
+  globalThis[key] = key;
 }
 
-function TestMath() {
-  print(Math.cos);
-  extendBuiltin(Math);
-  print(Math.cos);
-}
-
-function TestArray() {
-  print(Array.name);
-  extendBuiltin(Array);
-  print(Array.name);
-}
-
-function TestObject() {
-  print(Object.name);
-  extendBuiltin(Object);
-  print(Object.name);
-}
-
-function TestString() {
-  print(String.name);
-  extendBuiltin(String);
-  print(String.name);
-}
-
-function TestDate() {
-  print(Date.now);
-  extendBuiltin(Date);
-  print(Date.now);
-}
-
-TestArray();
-TestDate();
-TestMath();
-TestObject();
-TestString();
+print(Array);
+modify("Array");
+print(Array);
