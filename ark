@@ -99,6 +99,10 @@ if [[ $1 == "build" ]]; then
         args+=("--fast-rebuild")
     fi
 
+    if [[ $2 == "dasm" ]]; then
+        run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_host_linux_tools_packages"
+    fi
+
     if [[ $2 == "pre" ]]; then
         run "$OHOS_PATH/build/prebuilts_download.sh"
     else
@@ -117,19 +121,47 @@ file_name=$(basename "$file_path" | cut -d. -f1)
 
 for arg in "$@"; do
     if [[ $arg == "abc" || $arg == "all" ]]; then
-        rm -f $file_name.abc
-        run "es2abc $file_path --merge-abc --module --type-extractor --output $file_name.abc"
+        args=(
+            "--merge-abc"
+            "--module"
+            "--type-extractor"
+            "--output $file_name.abc"
+        )
+        run "rm -f $file_name.abc"
+        run "es2abc $file_path ${args[@]}"
     fi
 
     if [[ $arg == "ap" || $arg == "all" ]]; then
-        rm -f $file_name.ap
-        run "ark_js_vm --enable-pgo-profiler=true --compiler-pgo-profiler-path=$file_name.ap --entry-point=$file_name $file_name.abc"
+        args=(
+            "--enable-pgo-profiler=true"
+            "--compiler-pgo-profiler-path=$file_name.ap"
+            "--entry-point=$file_name"
+            "$file_name.abc"
+        )
+        run "rm -f $file_name.ap"
+        run "ark_js_vm ${args[@]}"
     fi
 
-    #  --compiler-log=all0123 --log-level=info
+    # --compiler-log=all0123 --log-level=info  --compiler-trace-bc=true
     if [[ "$arg" == "aot" || $arg == "all" ]]; then
-        rm -f $file_name.an $file_name.ai
-        run "ark_aot_compiler --compiler-trace-bc=true --compiler-pgo-profiler-path=$file_name.ap --aot-file=$file_name $file_name.abc"
+        args=(
+            "--compiler-pgo-profiler-path=$file_name.ap"
+            "--aot-file=$file_name"
+            "$file_name.abc"
+        )
+        run "rm -f $file_name.an $file_name.ai"
+        run "ark_aot_compiler ${args[@]}"
+    fi
+
+    # --compiler-log=all0123 --log-level=info
+    if [[ "$arg" == "asm" || $arg == "all" ]]; then
+        args=(
+            # "--asm-interpreter=false"
+            "--entry-point=$file_name"
+            "--aot-file=$file_name"
+            "$file_name.abc"
+        )
+        run "ark_js_vm ${args[@]}"
     fi
 
     # ark aot --log-components=compiler --compiler-log=all0123 --log-level=debug --aot-file=i i.abc
@@ -147,10 +179,6 @@ for arg in "$@"; do
 
     if [[ "$arg" == "aotpd" ]]; then
         run "gdb --args ark_aot_compiler --aot-file=$file_name $file_name.abc"
-    fi
-
-    if [[ "$arg" == "asm" ]]; then
-        run "ark_js_vm --compiler-log=all0123 --log-level=info --entry-point=$file_name --aot-file=$file_name $file_name.abc"
     fi
 
     if [[ "$arg" == "asmp" ]]; then

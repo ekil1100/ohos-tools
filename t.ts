@@ -14,10 +14,56 @@
  */
 declare function print(arg: any, arg1?: any): string;
 
-function modify(key: any) {
-  globalThis[key] = key;
-}
+print(`globalThis: ${globalThis}`);
 
-print(Array);
-modify("Array");
-print(Array);
+print(`Math: ${Math}`);
+globalThis.Math = "Math";
+print(`Math: ${Math}`);
+
+print(`Promise: ${Promise}`);
+globalThis.Promise = "Promise";
+print(`Promise: ${Promise}`);
+
+print(`Proxy: ${Proxy}`);
+globalThis.Proxy = "Proxy";
+print(`Proxy: ${Proxy}`);
+
+print(`Reflect: ${Reflect}`);
+globalThis.Reflect = "Reflect";
+print(`Reflect: ${Reflect}`);
+
+print(`JSON: ${JSON}`);
+globalThis.JSON = "JSON";
+print(`JSON: ${JSON}`);
+
+print(`Intl: ${Intl}`);
+globalThis.Intl = "Intl";
+print(`Intl: ${Intl}`);
+
+print(`Number: ${Number}`);
+globalThis.Number = "Number";
+print(`Number: ${Number}`);
+
+print(`Object: ${Object}`);
+globalThis.Object = "Object";
+print(`Object: ${Object}`);
+
+print(`Boolean: ${Boolean}`);
+globalThis.Boolean = "Boolean";
+print(`Boolean: ${Boolean}`);
+
+print(`RegExp: ${RegExp}`);
+globalThis.RegExp = "RegExp";
+print(`RegExp: ${RegExp}`);
+
+print(`String: ${String}`);
+globalThis.String = "String";
+print(`String: ${String}`);
+
+print(`Array: ${Array}`);
+globalThis.Array = "Array";
+print(`Array: ${Array}`);
+
+print(`Function: ${Function}`);
+globalThis.Function = "Function";
+print(`Function: ${Function}`);
