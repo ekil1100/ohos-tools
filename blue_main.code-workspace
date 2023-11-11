@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "path": "../standalone/arkcompiler/ets_runtime"
+      "path": "../main/arkcompiler/ets_runtime"
     },
     {
       "path": "."

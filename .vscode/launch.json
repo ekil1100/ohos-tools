@@ -5,6 +5,40 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "(gdb) standalone jsvm",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${userHome}/repo/ohos/standalone/out/x64.debug/arkcompiler/ets_runtime/ark_js_vm",
+      "args": [
+        // "--compiler-log=all0123",
+        // "--log-level=debug",
+        // "--asm-interpreter=false",
+        "--entry-point=t",
+        "--aot-file=t",
+        "t.abc"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${userHome}/repo/ohos/tools",
+      "envFile": "${workspaceFolder}/.env",
+      "externalConsole": false,
+      "linux": {
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to linux",
+          "text": "-gdb-set disassembly-flavor linux",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
       "name": "(gdb) AOT",
       "type": "cppdbg",
       "request": "launch",

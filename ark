@@ -1,17 +1,24 @@
 #!/bin/bash
 export OHOS_PATH=~/repo/ohos/$OHOS_ENV
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/test/test
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
+# if [[ $OHOS_DEBUG == "on" ]]; then
+#     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
+# else
+#     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
+# fi
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/thirdparty/zlib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/test/test
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
-if [[ $OHOS_DEBUG == "on" ]]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
-else
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
-fi
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/thirdparty/icu
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/lib.unstripped/arkcompiler/ets_runtime
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/lib.unstripped/clang_x64/thirdparty/icu
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/ets_frontend
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/runtime_core
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/ets_runtime
 export PATH=$PATH:$LD_LIBRARY_PATH
 
 check() {

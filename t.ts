@@ -63,6 +63,8 @@ declare function print(arg: any, arg1?: any): string;
 print(`Array: ${Array}`);
 globalThis.Array = "Array";
 print(`Array: ${Array}`);
+let a = Array;
+print(`Array: ${a}`);
 
 // print(`Function: ${Function}`);
 // globalThis.Function = "Function";
