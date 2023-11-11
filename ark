@@ -43,20 +43,20 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
-if [[ $1 == "abc" ]]; then
-    es2abc ${@:2}
-    exit 0
-fi
+# if [[ $1 == "abc" ]]; then
+#     es2abc ${@:2}
+#     exit 0
+# fi
 
-if [[ $1 == "aot" ]]; then
-    ark_aot_compiler ${@:2}
-    exit 0
-fi
+# if [[ $1 == "aot" ]]; then
+#     ark_aot_compiler ${@:2}
+#     exit 0
+# fi
 
-if [[ $1 == "vm" ]]; then
-    ark_js_vm ${@:2}
-    exit 0
-fi
+# if [[ $1 == "vm" ]]; then
+#     ark_js_vm ${@:2}
+#     exit 0
+# fi
 
 if [[ $1 == "init" ]]; then
     dir=$(dirname $(realpath $0))
@@ -127,8 +127,32 @@ if [[ $1 == "clean" ]]; then
     exit 0
 fi
 
-file_path=$1
-file_name=$(basename "$file_path" | cut -d. -f1)
+if [[ -f $1 ]]; then
+    file_path=$1
+    file_name=$(basename "$file_path" | cut -d. -f1)
+else
+    file_path="t.ts"
+    file_name="t"
+fi
+
+if [[ $2 == "--" ]]; then
+    if [[ $1 == "abc" ]]; then
+        run "es2abc ${@:3}"
+        exit 0
+    fi
+
+    if [[ $1 == "aot" ]]; then
+        run "ark_aot_compiler ${@:3}"
+        exit 0
+    fi
+
+    if [[ $1 == "asm" ]]; then
+        run "ark_js_vm ${@:3}"
+        exit 0
+    fi
+fi
+
+
 
 for arg in "$@"; do
     if [[ $arg == "abc" || $arg == "all" ]]; then
