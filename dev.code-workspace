@@ -1,6 +1,9 @@
 {
   "folders": [
     {
+      "path": "."
+    },
+    {
       "path": "../dev/arkcompiler/ets_runtime"
     }
   ],
