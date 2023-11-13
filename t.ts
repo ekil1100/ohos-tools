@@ -14,12 +14,6 @@
  */
 declare function print(arg: any, arg1?: any): string;
 
-// print(`globalThis: ${globalThis}`);
-
-// print(`Math: ${Math}`);
-// globalThis.Math = "Math";
-// print(`Math: ${Math}`);
-
 // print(`Promise: ${Promise}`);
 // globalThis.Promise = "Promise";
 // print(`Promise: ${Promise}`);
@@ -27,18 +21,6 @@ declare function print(arg: any, arg1?: any): string;
 // print(`Proxy: ${Proxy}`);
 // globalThis.Proxy = "Proxy";
 // print(`Proxy: ${Proxy}`);
-
-// print(`Reflect: ${Reflect}`);
-// globalThis.Reflect = "Reflect";
-// print(`Reflect: ${Reflect}`);
-
-// print(`JSON: ${JSON}`);
-// globalThis.JSON = "JSON";
-// print(`JSON: ${JSON}`);
-
-// print(`Intl: ${Intl}`);
-// globalThis.Intl = "Intl";
-// print(`Intl: ${Intl}`);
 
 // print(`Number: ${Number}`);
 // globalThis.Number = "Number";
@@ -60,12 +42,19 @@ declare function print(arg: any, arg1?: any): string;
 // globalThis.String = "String";
 // print(`String: ${String}`);
 
-print(`Array: ${Array}`);
-globalThis.Array = "Array";
-print(`Array: ${Array}`);
-let a = Array;
-print(`Array: ${a}`);
+// print(Array);
+// globalThis.Array = "Array";
+// print(Array);
 
 // print(`Function: ${Function}`);
 // globalThis.Function = "Function";
 // print(`Function: ${Function}`);
+
+
+function f26() {
+  function f29() {}
+  f29();
+  throw f29;
+}
+const v31 = f26();
+class C33 {}
