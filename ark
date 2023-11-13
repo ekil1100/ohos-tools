@@ -49,6 +49,7 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
+# eval "$(ark init)"
 if [[ $1 == "init" ]]; then
     dir=$(dirname $(realpath $0))
     cat $dir/ark.bash
