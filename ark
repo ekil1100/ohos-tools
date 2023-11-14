@@ -118,8 +118,13 @@ if [[ $1 == "build" ]]; then
         "--build-target ark_js_packages"
         "--build-target ark_js_host_linux_tools_packages"
     )
+
     if [[ $DEBUG == "on" ]]; then
         args+=("--gn-args is_debug=true")
+    fi
+
+    if [[ $@ =~ "-gn" ]]; then
+        args+=("--build-only-gn")
     fi
 
     if [[ $@ =~ "-c" ]]; then
