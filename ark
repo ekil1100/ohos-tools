@@ -1,29 +1,36 @@
 #!/bin/bash
-# ark.bash
-# export OHOS_PATH=~/repo/ohos/main
-
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/thirdparty/icu
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/lib.unstripped/arkcompiler/ets_runtime
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/lib.unstripped/clang_x64/thirdparty/icu
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/ets_frontend
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/runtime_core
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.release/arkcompiler/ets_runtime
 DEBUG=on
 LOG_LEVEL=warning
+IS_SA=$OHOS_IS_SA
+MODE=release
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/ohos-sdk/linux/11/toolchains
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/zlib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
 if [[ $DEBUG == "on" ]]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
-else
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
+    MODE=debug
 fi
+
+if [[ $IS_SA == true ]]; then
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/thirdparty/icu
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/lib.unstripped/arkcompiler/ets_runtime
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/lib.unstripped/clang_x64/thirdparty/icu
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/ets_frontend
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/runtime_core
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/ets_runtime
+else
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/ohos-sdk/linux/11/toolchains
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/zlib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/thirdparty/icu
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/arkcompiler/ets_runtime
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_frontend
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/runtime_core
+    if [[ $DEBUG == "on" ]]; then
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/exe.unstripped/clang_x64/arkcompiler/ets_runtime
+    else
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
+    fi
+fi
+
 export PATH=$PATH:$LD_LIBRARY_PATH
 
 check() {
@@ -62,18 +69,30 @@ if [[ $1 == "clean" ]]; then
 fi
 
 if [[ $1 == "ut" ]]; then
+    if [[ $IS_SA == true ]]; then
+        run "python ark.py x64.$MODE ut"
+        exit 0
+    fi
+
     flags=(
         "--product-name rk3568"
         "--build-target ark_js_host_unittest"
     )
+
     if [[ $DEBUG == "on" ]]; then
         flags+=("--gn-args is_debug=true")
     fi
+    
     run "$OHOS_PATH/build.sh ${flags[@]}"
     exit 0
 fi
 
 if [[ $1 == "262" ]]; then
+    if [[ $IS_SA == true ]]; then
+        run "python ark.py x64.$MODE 262"
+        exit 0
+    fi
+
     run "cd $OHOS_PATH/arkcompiler/ets_frontend"
     if [[ $2 == "aot" ]]; then
         flags=(
@@ -112,6 +131,15 @@ if [[ $1 == "262" ]]; then
 fi
 
 if [[ $1 == "build" ]]; then
+    if [[ $IS_SA == true ]]; then
+        if [[ $@ =~ "-c" ]]; then
+            prebuilts/build-tools/linux-x86/bin/gn gen out/x64.$MODE --args="target_os=\"linux\" target_cpu=\"x64\" is_debug=true" --export-compile-commands
+        else
+            run "python ark.py x64.$MODE"
+        fi
+        exit 0
+    fi
+
     args=(
         "--product-name rk3568"
         "--build-target ets_frontend_build"
