@@ -151,7 +151,7 @@ if [[ $1 == "build" ]]; then
         args+=("--gn-args is_debug=true")
     fi
 
-    if [[ $@ =~ "-gn" ]]; then
+    if [[ $@ =~ "-gn" || $@ =~ "-c" ]]; then
         args+=("--build-only-gn")
     fi
 
