@@ -51,6 +51,7 @@ run() {
 if [[ -z $1 ]]; then
     JSVM_PATH=$(dirname $(which ark_js_vm) 2>/dev/null || echo -e '\e[31mUnset\e[0m')
     LOG_LEVEL=$LOG_LEVEL || echo -e '\e[31mUnset\e[0m'
+    echo "OHOS_IS_SA: $OHOS_IS_SA"
     echo "DEBUG: $DEBUG"
     echo "LOG_LEVEL: $LOG_LEVEL"
     echo "OHOS_PATH: $OHOS_PATH"
@@ -119,11 +120,6 @@ if [[ $1 == "262" ]]; then
 fi
 
 if [[ $1 == "ut" ]]; then
-    if [[ $IS_SA == true ]]; then
-        run "python ark.py x64.$MODE ut"
-        exit 0
-    fi
-
     flags=(
         "--product-name rk3568"
         "--build-target ark_js_host_unittest"
@@ -144,7 +140,11 @@ if [[ $1 == "build" ]]; then
             run 'prebuilts/build-tools/linux-x86/bin/gn gen out/x64.$MODE --args="target_os=\"linux\" target_cpu=\"x64\" is_debug=true" --export-compile-commands'
             exit 0
         fi
-
+        if [[ $@ =~ "-p" ]]; then
+            run "$OHOS_PATH/prebuilts_download.sh"
+            exit 0
+        fi
+        # 262, ut, EcmaVm_001_Test
         run "python ark.py x64.$MODE ${@:2}"
         exit 0
     fi
