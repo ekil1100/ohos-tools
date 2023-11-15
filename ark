@@ -16,6 +16,7 @@ if [[ $IS_SA == true ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/ets_frontend
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/runtime_core
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/arkcompiler/ets_runtime
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/x64.$MODE/test/test
 else
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/clang/ohos/linux-x86_64/llvm/lib
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/prebuilts/ohos-sdk/linux/11/toolchains
@@ -29,6 +30,7 @@ else
     else
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/arkcompiler/ets_runtime
     fi
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$OHOS_PATH/out/rk3568/clang_x64/lib.unstripped/clang_x64/test/test
 fi
 
 export PATH=$PATH:$LD_LIBRARY_PATH
@@ -56,6 +58,11 @@ if [[ -z $1 ]]; then
     exit 0
 fi
 
+if [[ $1 == "run" ]]; then
+    run "${@:2}"
+    exit 0
+fi
+
 # eval "$(ark init)"
 if [[ $1 == "init" ]]; then
     dir=$(dirname $(realpath $0))
@@ -65,25 +72,6 @@ fi
 
 if [[ $1 == "clean" ]]; then
     rm -rf *.abc *.ap *.ai *.an *.pa *.abc.ll *.abc_opt.ll *.log *.perf
-    exit 0
-fi
-
-if [[ $1 == "ut" ]]; then
-    if [[ $IS_SA == true ]]; then
-        run "python ark.py x64.$MODE ut"
-        exit 0
-    fi
-
-    flags=(
-        "--product-name rk3568"
-        "--build-target ark_js_host_unittest"
-    )
-
-    if [[ $DEBUG == "on" ]]; then
-        flags+=("--gn-args is_debug=true")
-    fi
-    
-    run "$OHOS_PATH/build.sh ${flags[@]}"
     exit 0
 fi
 
@@ -130,13 +118,39 @@ if [[ $1 == "262" ]]; then
     exit 0
 fi
 
+if [[ $1 == "ut" ]]; then
+    if [[ $IS_SA == true ]]; then
+        run "python ark.py x64.$MODE ut"
+        exit 0
+    fi
+
+    flags=(
+        "--product-name rk3568"
+        "--build-target ark_js_host_unittest"
+        # "--build-target EcmaVm_001_Test"
+    )
+
+    if [[ $DEBUG == "on" ]]; then
+        flags+=("--gn-args is_debug=true")
+    fi
+
+    run "$OHOS_PATH/build.sh ${flags[@]}"
+    exit 0
+fi
+
 if [[ $1 == "build" ]]; then
     if [[ $IS_SA == true ]]; then
         if [[ $@ =~ "-c" ]]; then
-            prebuilts/build-tools/linux-x86/bin/gn gen out/x64.$MODE --args="target_os=\"linux\" target_cpu=\"x64\" is_debug=true" --export-compile-commands
-        else
-            run "python ark.py x64.$MODE"
+            run 'prebuilts/build-tools/linux-x86/bin/gn gen out/x64.$MODE --args="target_os=\"linux\" target_cpu=\"x64\" is_debug=true" --export-compile-commands'
+            exit 0
         fi
+
+        run "python ark.py x64.$MODE ${@:2}"
+        exit 0
+    fi
+
+    if [[ $2 == "pre" ]]; then
+        run "$OHOS_PATH/build/prebuilts_download.sh"
         exit 0
     fi
 
@@ -167,11 +181,7 @@ if [[ $1 == "build" ]]; then
         run "$OHOS_PATH/build.sh --product-name rk3568 --build-target ark_host_linux_tools_packages"
     fi
 
-    if [[ $2 == "pre" ]]; then
-        run "$OHOS_PATH/build/prebuilts_download.sh"
-    else
-        run "$OHOS_PATH/build.sh ${args[@]}"
-    fi
+    run "$OHOS_PATH/build.sh ${args[@]}"
     exit 0
 fi
 
@@ -181,23 +191,6 @@ if [[ -f $1 ]]; then
 else
     file_path="t.ts"
     file_name="t"
-fi
-
-if [[ $2 == "--" ]]; then
-    if [[ $1 == "abc" ]]; then
-        run "es2abc ${@:3}"
-        exit 0
-    fi
-
-    if [[ $1 == "aot" ]]; then
-        run "ark_aot_compiler ${@:3}"
-        exit 0
-    fi
-
-    if [[ $1 == "asm" ]]; then
-        run "ark_js_vm ${@:3}"
-        exit 0
-    fi
 fi
 
 for arg in "$@"; do
@@ -259,7 +252,7 @@ for arg in "$@"; do
 
     if [[ "$arg" == "asm" || $arg == "all" ]]; then
         args=(
-            "--log-debug=builtins"
+            # "--log-debug=builtins"
             "--entry-point=$file_name"
             "--aot-file=$file_name"
             "$file_name.abc"

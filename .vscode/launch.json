@@ -5,6 +5,30 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "(gdb) ecmavm 001 test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "/home/like/repo/ohos/standalone/out/x64.debug/tests/unittest/arkcompiler/ets_runtime/EcmaVm_001_Test",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${userHome}/repo/ohos/tools",
+      "envFile": "${workspaceFolder}/.env.standalone",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
       "name": "(gdb) main jsvm",
       "type": "cppdbg",
       "request": "launch",
