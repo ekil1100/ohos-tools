@@ -121,6 +121,40 @@
       ]
     },
     {
+        "name": "(gdb) standalone/aot/debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${userHome}/repo/ohos/standalone/out/x64.debug/arkcompiler/ets_runtime/ark_aot_compiler",
+        "args": [
+          // "--compiler-log=all0123",
+          // "--log-level=debug",
+          "--compiler-enable-lowering-builtin",
+          "--compiler-pgo-profiler-path=t.ap",
+          "--aot-file=t",
+          "t.abc"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${userHome}/repo/ohos/tools",
+        "envFile": "${workspaceFolder}/.env.standalone",
+        "externalConsole": false,
+        "linux": {
+          "MIMode": "gdb",
+          "miDebuggerPath": "/usr/bin/gdb"
+        },
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          },
+          {
+            "description": "Set Disassembly Flavor to linux",
+            "text": "-gdb-set disassembly-flavor linux",
+            "ignoreFailures": true
+          }
+        ]
+      },
+    {
       "name": "(gdb) AOT",
       "type": "cppdbg",
       "request": "launch",
