@@ -119,21 +119,6 @@ if [[ $1 == "262" ]]; then
     exit 0
 fi
 
-if [[ $1 == "ut" ]]; then
-    flags=(
-        "--product-name rk3568"
-        "--build-target ark_js_host_unittest"
-        # "--build-target EcmaVm_001_Test"
-    )
-
-    if [[ $DEBUG == "on" ]]; then
-        flags+=("--gn-args is_debug=true")
-    fi
-
-    run "$OHOS_PATH/build.sh ${flags[@]}"
-    exit 0
-fi
-
 if [[ $1 == "build" ]]; then
     if [[ $IS_SA == true ]]; then
         if [[ $@ =~ "-c" ]]; then
@@ -156,10 +141,23 @@ if [[ $1 == "build" ]]; then
 
     args=(
         "--product-name rk3568"
-        "--build-target ets_frontend_build"
-        "--build-target ark_js_packages"
-        "--build-target ark_js_host_linux_tools_packages"
     )
+
+    if [[ $2 == "ut" ]]; then
+        args+=("--build-target ark_js_host_unittest")
+    fi
+
+    if [[ $2 == "001" ]]; then
+        args+=("--build-target EcmaVm_001_Test")
+    fi
+
+    if [[ $2 == "all" ]]; then
+        args+=(
+            "--build-target ets_frontend_build"
+            "--build-target ark_js_packages"
+            "--build-target ark_js_host_linux_tools_packages"
+        )
+    fi
 
     if [[ $DEBUG == "on" ]]; then
         args+=("--gn-args is_debug=true")

@@ -5,7 +5,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(gdb) ecmavm 001 test",
+        "name": "(gdb) main ecmavm 001 test",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "/home/like/repo/ohos/main/out/rk3568/clang_x64/tests/unittest/arkcompiler/ets_runtime/EcmaVm_001_Test",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${userHome}/repo/ohos/tools",
+        "envFile": "${workspaceFolder}/.env",
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          },
+          {
+            "description": "Set Disassembly Flavor to Intel",
+            "text": "-gdb-set disassembly-flavor intel",
+            "ignoreFailures": true
+          }
+        ]
+      },
+    {
+      "name": "(gdb) standalone/EcmaVm_001_test",
       "type": "cppdbg",
       "request": "launch",
       "program": "/home/like/repo/ohos/standalone/out/x64.debug/tests/unittest/arkcompiler/ets_runtime/EcmaVm_001_Test",
@@ -104,11 +128,11 @@
       "args": [
         // "--compiler-log=all0123",
         // "--log-level=debug",
-        "--compiler-pgo-profiler-path=t.ap",
-        "--aot-file=t",
-        "t.abc"
+        "--compiler-pgo-profiler-path=i.ap",
+        "--aot-file=i",
+        "i.abc"
       ],
-      "stopAtEntry": false,
+      "stopAtEntry": true,
       "cwd": "${userHome}/repo/ohos/tools",
       "envFile": "${workspaceFolder}/.env",
       "externalConsole": false,
