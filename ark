@@ -60,6 +60,11 @@ if [[ -z $1 ]]; then
 fi
 
 if [[ $1 == "run" ]]; then
+    args=${@:2}
+    if [[ $@ =~ "-d" ]]; then
+        run "gdb --args ${args[@]/'-d'}"
+        exit 0
+    fi
     run "${@:2}"
     exit 0
 fi
