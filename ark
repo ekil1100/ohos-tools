@@ -198,7 +198,7 @@ fi
 
 for arg in "$@"; do
     share=(
-        # "--compiler-enable-lowering-builtin=true"
+        "--compiler-enable-lowering-builtin=true"
     )
     if [[ $arg == "abc" || $arg == "all" ]]; then
         args=(
