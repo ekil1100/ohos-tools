@@ -24,19 +24,7 @@
       "linux": {
         "MIMode": "gdb",
         "miDebuggerPath": "/usr/bin/gdb"
-      },
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Set Disassembly Flavor to linux",
-          "text": "-gdb-set disassembly-flavor linux",
-          "ignoreFailures": true
-        }
-      ]
+      }
     },
     {
       "name": "(gdb) standalone/aot/debug",
@@ -58,19 +46,7 @@
       "linux": {
         "MIMode": "gdb",
         "miDebuggerPath": "/usr/bin/gdb"
-      },
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Set Disassembly Flavor to linux",
-          "text": "-gdb-set disassembly-flavor linux",
-          "ignoreFailures": true
-        }
-      ]
+      }
     },
     {
       "name": "(gdb) main ecmavm 001 test",
