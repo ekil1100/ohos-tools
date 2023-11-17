@@ -197,6 +197,9 @@ else
 fi
 
 for arg in "$@"; do
+    share=(
+        # "--compiler-enable-lowering-builtin=true"
+    )
     if [[ $arg == "abc" || $arg == "all" ]]; then
         args=(
             "--merge-abc"
@@ -210,6 +213,7 @@ for arg in "$@"; do
 
     if [[ $arg == "ap" || $arg == "all" ]]; then
         args=(
+            ${share[@]}
             "--enable-pgo-profiler=true"
             "--compiler-pgo-profiler-path=$file_name.ap"
             "--entry-point=$file_name"
@@ -224,6 +228,7 @@ for arg in "$@"; do
 
     if [[ $arg == "aot" || $arg == "all" ]]; then
         args=(
+            ${share[@]}
             "--compiler-pgo-profiler-path=$file_name.ap"
             "--aot-file=$file_name"
             "$file_name.abc"
@@ -255,7 +260,7 @@ for arg in "$@"; do
 
     if [[ "$arg" == "asm" || $arg == "all" ]]; then
         args=(
-            # "--log-debug=builtins"
+            ${share[@]}
             "--entry-point=$file_name"
             "--aot-file=$file_name"
             "$file_name.abc"
